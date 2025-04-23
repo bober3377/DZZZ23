@@ -1,0 +1,122 @@
+﻿<Window x:Class="PresentationTier.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PresentationTier"
+        mc:Ignorable="d"
+        Title="Анализ задолженностей" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen" Background="#ab20a4">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Button Name="btn_open_file" Content="Открыть файл" Grid.Row="1" Grid.Column="1" Width="115" Height="52"
+                VerticalAlignment="Top" Margin="30" Click="btn_open_file_Click" Background="#12e6e6" Foreground="White"/>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <Button Name="btn_add_to_file" Content="Добавить данные" Width="100" Height="40"
+                    Click="btn_add_to_file_Click" Background="#12e6e6" Foreground="White"/>
+            <Button Name="btn_delete_file" Content="Удалить данные" Width="100" Height="40"
+                    Click="btn_delete_file_Click" Background="#12e6e6" Foreground="White" Margin="0,10,0,0"/>
+        </StackPanel>
+
+        <Grid Grid.Row="0" Name="GridForPrepod"
+              DataContext="{Binding ElementName=MainList, Path=SelectedItem}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Margin="5" Grid.Row="0" Text="ФИО:"/>
+            <TextBox Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding ФИО}"/>
+
+            <TextBlock Margin="5" Grid.Row="1" Text="Группа:"/>
+            <TextBox Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Группа}"/>
+
+            <TextBlock Margin="5" Grid.Row="2" Text="Курс:"/>
+            <TextBox Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Курс}"/>
+
+            <TextBlock Margin="5" Grid.Row="3" Text="Задолженности:"/>
+            <TextBox Margin="5" Grid.Row="3" Grid.Column="1" 
+                     Text="{Binding КоличествоЗадолженностей, StringFormat={}{0:0}}"/>
+
+            <TextBlock Margin="5" Grid.Row="0" Text="ФИО:" Grid.Column="2"/>
+            <TextBox Name="FIO" Margin="5" Width="150"  Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left"/>
+
+            <TextBlock Margin="5" Grid.Row="1" Text="Группа:" Grid.Column="2"/>
+            <ComboBox x:Name="myComboBox" Width="150" Margin="5" Height="20" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left">
+                <ComboBoxItem>ИСТ-6-о-121</ComboBoxItem>
+                <ComboBoxItem>ИСТ-6-о-111</ComboBoxItem>
+                <ComboBoxItem>БАС-6-о-121</ComboBoxItem>
+                <ComboBoxItem>БАС-6-о-111</ComboBoxItem>
+            </ComboBox>
+
+            <TextBlock Margin="5" Grid.Row="2" Text="Курс:" Grid.Column="2"/>
+            <TextBox Name="Kaf" Margin="5" Width="150" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left"/>
+
+            <TextBlock Margin="5" Grid.Row="3" Text="Задолженности:" Grid.Column="2"/>
+            <TextBox Name="ZP" Margin="5" Width="150" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Name="GridforCollections">
+            <ListBox Name="MainList" 
+                     ItemsSource="{Binding СписокПреподавателей, Mode=OneWay}"
+                     DisplayMemberPath="ПредставлениеПреподавателя" Background="#12e6e6" Foreground="White"
+                     Margin="10" />
+        </Grid>
+
+        <Grid Grid.Row="2" Name="GridForItog">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+        <Grid Grid.Row="3" Name="GridForResults" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            
+            <ListView Name="GroupDebtsList" Grid.Column="0" 
+              ItemsSource="{Binding СуммаЗадолженностейПоГруппам}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Группа" DisplayMemberBinding="{Binding Key}" Width="150"/>
+                        <GridViewColumn Header="Сумма задолженностей" DisplayMemberBinding="{Binding Value}" Width="150"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            
+            <ListView Name="CourseDebtsList" Grid.Column="1" 
+              ItemsSource="{Binding СреднееЗадолженностейПоКурсам}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Курс" DisplayMemberBinding="{Binding Key}" Width="100"/>
+                        <GridViewColumn Header="Среднее задолженностей" 
+                               DisplayMemberBinding="{Binding Value, StringFormat={}{0:N2}}" Width="150"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </Grid>
+</Window>
